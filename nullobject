@@ -1,0 +1,64 @@
+<?php
+
+interface AbstractCustomer {
+    public function isNull(): bool;
+    public function getName(): string;
+}
+
+class RealCustomer implements AbstractCustomer {
+
+    private $name;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
+
+    public function isNull(): bool
+    {
+        return false;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+}
+
+class NullCustomer implements AbstractCustomer {
+
+    public function isNull(): bool
+    {
+        return true;
+    }
+
+    public function getName(): string
+    {
+        return "Not Available in Customer Database";
+    }
+}
+
+class CustomerFactory {
+
+    public array $names = ["Rob", "Joe", "Julie"];
+
+    public function getCustomer(string $name) {
+
+    for ($i=0; $i < count($this->names); $i++) {
+        if (strtolower($this->names[$i]) === strtolower($name)){
+            return new RealCustomer($name);
+        }
+    }
+      return new NullCustomer();
+   }
+}
+
+$customer1 = (new CustomerFactory())->getCustomer("Rob");
+$customer2 = (new CustomerFactory())->getCustomer("Bob");
+$customer3 = (new CustomerFactory())->getCustomer("Julie");
+$customer4 = (new CustomerFactory())->getCustomer("Misha");
+
+print_r($customer1->getName());
+print_r($customer2->getName());
+print_r($customer3->getName());
+print_r($customer4->getName());
